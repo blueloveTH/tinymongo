@@ -39,18 +39,21 @@ class Database:
 
     def dereference(self, dbref: str) -> {' | '.join(all_row_types.values())!r}:
         table, id = dbref[1:].split(':')
-        return self.tables[table].get_by_id(id)
+        return self.tables[table].indexed_data[id]
 
     @property
     def name(self):
         return {self.name!r}
 
 class Table(Generic[T]):
-    def __init__(self, name: str, index: list[int], data: list):
+    data: list['T']
+    indexed_data: dict[int, 'T']
+
+    def __init__(self, name: str, index: list[int], data: list['T']):
         assert len(index) == len(data)
         self.name = name
-        self.indexed_data = {{i: row for i, row in zip(index, data)}}
         self.data = data
+        self.indexed_data = {{i: row for i, row in zip(index, data)}}
         
     def __len__(self):
         return len(self.data)
@@ -58,11 +61,21 @@ class Table(Generic[T]):
     def __iter__(self):
         return iter(self.data)
 
-    def __getitem__(self, i: int) -> 'T':
+    def __getitem__(self, i: int):
         return self.data[i]
 
-    def get_by_id(self, id: int) -> 'T':
-        return self.indexed_data[id]
+    def with_id(self, id: int):
+        return self.indexed_data.get(id)
+
+    def objects(self, **queries) -> list['T']:
+        results = []
+        for row in self.data:
+            for k, v in queries.items():
+                if getattr(row, k) != v:
+                    break
+            else:
+                results.append(row)
+        return results
 ''']
     
     for table in self.tables.values():  
