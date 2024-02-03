@@ -14,6 +14,9 @@ class Translation:
     WelcomeMessage = "Welcome! Create a table or import a database to get started."
     ChooseFile = "Choose a file"
 
+    CopyDBRef = "Copy ref"
+    InvalidName = "Name should be a valid identifier"
+
 
 class TranslationCN:
     CreateTable = "创建表"
@@ -30,3 +33,6 @@ class TranslationCN:
 
     WelcomeMessage = "欢迎！创建一个表或导入 DB 以开始。"
     ChooseFile = "选择文件"
+
+    CopyDBRef = "复制引用"
+    InvalidName = "名字必须是合法的标识符"
