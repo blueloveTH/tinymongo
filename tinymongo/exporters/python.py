@@ -39,7 +39,7 @@ class Database:
 
     def dereference(self, dbref: str) -> {' | '.join(all_row_types.values())!r}:
         table, id = dbref[1:].split(':')
-        return self.tables[table].indexed_data[id]
+        return self.tables[table].indexed_data[int(id)]
 
     @property
     def name(self):
@@ -64,6 +64,7 @@ class Table(Generic[T]):
         return self.data[i]
 
     def with_id(self, id: int):
+        assert type(id) is int
         return self.indexed_data.get(id)
 
     def objects(self, **queries) -> list['T']:
