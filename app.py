@@ -3,7 +3,6 @@ import sys
 import pandas as pd
 import pickle as pkl
 import base64
-import keyword
 
 from tinymongo.columns import COLUMN_TYPES
 from tinymongo.db import Database, Table
