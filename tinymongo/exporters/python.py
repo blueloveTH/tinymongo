@@ -49,11 +49,10 @@ class Table(Generic[T]):
     data: list['T']
     indexed_data: dict[int, 'T']
 
-    def __init__(self, name: str, index: list[int], data: list['T']):
-        assert len(index) == len(data)
+    def __init__(self, name: str, data: list['T']):
         self.name = name
         self.data = data
-        self.indexed_data = {{i: row for i, row in zip(index, data)}}
+        self.indexed_data = {{row.id: row for row in data}}
         
     def __len__(self):
         return len(self.data)
@@ -87,6 +86,7 @@ class {all_row_types[table]}(Table):
         empty = True
         for i, col_type_name in enumerate(table.column_types.values()):
             if i == 0:
+                src.append(f'    id: int\n')
                 continue
             col_type = COLUMN_TYPES[col_type_name]
             col_name = table.df.columns[i]
@@ -113,9 +113,10 @@ class {all_row_types[table]}(Table):
     
     for table in self.tables.values():
         data_repr = ['[\n']
-        for row in table.df.itertuples(index=False):
+        for row in table.df.itertuples(index=True):
+            row = list(row); del row[1]
             data_repr.append('    ')
-            data_repr.append(all_row_types[table] + repr(tuple(row[1:])))
+            data_repr.append(all_row_types[table] + repr(tuple(row)))
             data_repr.append(',\n')
         data_repr.append(']')
         src.append(f'''
