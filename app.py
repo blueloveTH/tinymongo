@@ -37,7 +37,11 @@ def save_draft_df():
 
 if db.tables:
     for table_name in db.tables:
-        if sidebar.button(table_name, key=table_name, use_container_width=True):
+        if db.current_table is not None and db.current_table.name == table_name:
+            button_type = 'primary'
+        else:
+            button_type = 'secondary'
+        if sidebar.button(table_name, key=table_name, use_container_width=True, type=button_type):
             save_draft_df()
             db.set_current_table(table_name)
             st.rerun()
