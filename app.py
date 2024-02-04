@@ -58,7 +58,7 @@ if _1.button(tr.CreateTable):
                 db.set_current_table(table_name)
                 st.rerun()
 
-sub_cols = st.columns([1, 1, 1, 0.8, 1, 1, 1.2])
+sub_cols = st.columns([1, 1, 1, 1.2, 1, 1])
 
 # add row
 if sub_cols[0].button(tr.InsertRow) and db.current_table:
