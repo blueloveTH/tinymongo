@@ -34,7 +34,7 @@ class ColumnTypeFloat(ColumnType):
     default = 0.0
     dtype = 'float64'
     def get_config(self, label: str):
-        return st.column_config.NumberColumn(label, default=0.0, min_value=-100000, max_value=100000)
+        return st.column_config.NumberColumn(label, default=0.0)
     
 class ColumnTypeBool(ColumnType):
     default = False
