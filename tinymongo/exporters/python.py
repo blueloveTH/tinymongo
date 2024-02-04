@@ -16,6 +16,7 @@ def export(self: 'Database') -> str:
     db_tables = []
     for table in self.tables.values():
         db_tables.append(f"    {table.name}: 'Table[{all_row_types[table]}]'")
+
     src = [f'''# {metadata}      
 # Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             
