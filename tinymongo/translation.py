@@ -16,6 +16,7 @@ class Translation:
 
     CopyDBRef = "Copy ref"
     InvalidName = "Name should be a valid identifier"
+    InvalidDBRef = '{} is not a valid dbref in {}, row {}'
 
 
 class TranslationCN:
@@ -36,3 +37,4 @@ class TranslationCN:
 
     CopyDBRef = "复制引用"
     InvalidName = "名字必须是合法的标识符"
+    InvalidDBRef = '{} 不是一个的有效的引用，在表 {} 行 {}'

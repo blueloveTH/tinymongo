@@ -114,9 +114,13 @@ if IMPORT_DB_KEY in st.session_state:
 
 if sub_cols[5].button(tr.ExportDB):
     save_draft_df()
-    exported = export_python(db)
-    size_in_kb = int(len(exported) / 1024)
-    st.download_button(label=f"Download ({size_in_kb} KB)", data=export_python(db), file_name='db.py')
+    ok, error = db.check_integrity()
+    if not ok:
+        st.error(tr.InvalidDBRef.format(*error))
+    else:
+        exported = export_python(db)
+        size_in_kb = int(len(exported) / 1024)
+        st.download_button(label=f"Download ({size_in_kb} KB)", data=export_python(db), file_name='db.py')
 
 # add column
 sidebar.subheader(tr.CreateColumn)

@@ -37,3 +37,19 @@ class Database:
     def set_current_table(self, table_name: str | None):
         self.current_table = self.tables.get(table_name)
   
+    def check_integrity(self) -> tuple[bool, str]:
+        for table in self.tables.values():
+            for col in table.df.columns:
+                col_type = table.get_column_type(col)
+                if col_type.name != 'dbref':
+                    continue
+                for rowi, value in enumerate(table.df[col], start=1):
+                    try:
+                        assert isinstance(value, str)
+                        assert value[0] == '^'
+                        _0, _1 = value[1:].split(':')
+                        assert _0 in self.tables
+                        assert int(_1) in self.tables[_0].df.index
+                    except:
+                        return False, (value, table.name, rowi)
+        return True, None
