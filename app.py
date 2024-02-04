@@ -8,7 +8,9 @@ from tinymongo.columns import COLUMN_TYPES
 from tinymongo.db import Database, Table
 from tinymongo.style import setup_style
 from tinymongo.translation import Translation, TranslationCN
+
 from tinymongo.exporters.python import export as export_python
+from tinymongo.exporters.csharp import export as export_csharp
 
 sidebar = st.sidebar
 
@@ -110,11 +112,18 @@ if IMPORT_DB_KEY in st.session_state:
     if uploaded_file is not None:
         db_src = uploaded_file.getvalue().decode()
         metadata, *src = db_src.split('\n')
-        metadata = metadata.removeprefix('# ')
-        new_db: Database = pkl.loads(base64.b64decode(metadata))
-        st.session_state.clear()
-        st.session_state[DB_KEY] = new_db
-        st.rerun()
+        if metadata.startswith('# '):
+            metadata = metadata[2:]
+        elif metadata.startswith('// '):
+            metadata = metadata[3:]
+        else:
+            st.error(tr.InvalidImportMetadata)
+            metadata = None
+        if metadata:
+            new_db: Database = pkl.loads(base64.b64decode(metadata))
+            st.session_state.clear()
+            st.session_state[DB_KEY] = new_db
+            st.rerun()
 
 if sub_cols[5].button(tr.ExportDB):
     save_draft_df()
@@ -122,9 +131,15 @@ if sub_cols[5].button(tr.ExportDB):
     if not ok:
         st.error(tr.InvalidDBRef.format(*error))
     else:
-        exported = export_python(db)
-        size_in_kb = int(len(exported) / 1024)
-        st.download_button(label=f"Download ({size_in_kb} KB)", data=export_python(db), file_name='db.py')
+        python_data = export_python(db)
+        size_in_kb = int(len(python_data) / 1024)
+        st.download_button(label=f"Download Python ({size_in_kb} KB)", data=python_data, file_name='db.py')
+
+        csharp_data = export_csharp(db)
+        size_in_kb = int(len(csharp_data) / 1024)
+        st.download_button(label=f"Download CSharp ({size_in_kb} KB)", data=csharp_data, file_name='db.cs')
+
+        # st.code(csharp_data, language='csharp')
 
 # add column
 sidebar.subheader(tr.CreateColumn)

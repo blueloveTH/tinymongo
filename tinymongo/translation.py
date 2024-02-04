@@ -18,6 +18,8 @@ class Translation:
     InvalidName = "Name should be a valid identifier"
     InvalidDBRef = '{} is not a valid dbref in {}, row {}'
 
+    InvalidImportMetadata = "Invalid import metadata"
+
 
 class TranslationCN:
     CreateTable = "创建表"
@@ -38,3 +40,5 @@ class TranslationCN:
     CopyDBRef = "复制引用"
     InvalidName = "名字必须是合法的标识符"
     InvalidDBRef = '{} 不是一个的有效的引用，在表 {} 行 {}'
+
+    InvalidImportMetadata = "导入的元数据无效"
