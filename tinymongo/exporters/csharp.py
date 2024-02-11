@@ -63,6 +63,7 @@ namespace TinyMongo.{self.name}
 
         public object Dereference(string dbref)
         {{
+            if(string.IsNullOrEmpty(dbref)) return null;
             var parts = dbref.Substring(1).Split(':');
             var table = parts[0];
             var id = int.Parse(parts[1]);

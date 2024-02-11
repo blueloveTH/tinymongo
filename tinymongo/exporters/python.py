@@ -101,7 +101,8 @@ class {all_row_types[table]}(Table):
                 src.append(f'''
     @property
     def {col_name}(self):
-        return db.dereference(self.{ref_col_name})
+        if self.{ref_col_name}:
+            return db.dereference(self.{ref_col_name})
 ''')
             else:
                 src.append(f'    {col_name}: {col_type.name}\n')
